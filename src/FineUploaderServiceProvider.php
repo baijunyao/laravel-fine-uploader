@@ -1,10 +1,8 @@
 <?php
 
-namespace Baijunyao\LaravelFlash;
+namespace Baijunyao\LaravelFineUploader;
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
-use Baijunyao\LaravelFlash\Middleware\LaravelFlash;
 
 class FineUploaderServiceProvider extends ServiceProvider
 {
