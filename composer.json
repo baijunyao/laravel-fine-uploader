@@ -1,0 +1,25 @@
+{
+    "name": "baijunyao/laravel-fine-uploader",
+    "description": "fine-uploader",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "baijunyao",
+            "email": "baijunyao@baijunyao.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Baijunyao\\LaravelFineUploader\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Baijunyao\\LaravelFineUploader\\FineUploaderServiceProvider"
+            ]
+        }
+    }
+}
