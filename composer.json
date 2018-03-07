@@ -9,7 +9,9 @@
             "email": "baijunyao@baijunyao.com"
         }
     ],
-    "require": {},
+    "require": {
+        "baijunyao/laravel-upload": "1.0.*"
+    },
     "autoload": {
         "psr-4": {
             "Baijunyao\\LaravelFineUploader\\": "src/"
