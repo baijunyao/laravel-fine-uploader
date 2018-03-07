@@ -13,15 +13,18 @@ class FineUploaderServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // 静态资源文件
+        // 发布静态资源文件
         $this->publishes([
             __DIR__.'/resources/statics' => public_path('statics'),
         ], 'public');
 
-        // html组件
+        // 发布 html 组件
         $this->publishes([
             __DIR__.'/resources/views/component' => resource_path('views/component'),
         ]);
+
+        // 加载 migrate 
+        $this->loadMigrationsFrom(__DIR__.'/migrations');
     }
 
     /**
