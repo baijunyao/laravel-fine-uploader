@@ -1,3 +1,6 @@
+@php
+    $element = empty($element) ? 'bjy'.uniqid() : $element;
+@endphp
 <div id="{{ $element }}"></div>
 
 @push('css')
@@ -93,7 +96,7 @@
                 customHeaders: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                endpoint: '{{ $requestEndPoint }}',
+                endpoint: '{{ url('fineUploader/upload') }}',
                 inputName: 'file',
             },
             callbacks: {
@@ -107,7 +110,7 @@
                     $('#{{ $element }}').append(inputStr);
 
                     // 设置删除时候的url和参数
-                    {{camel_case($element)}}Obj.setDeleteFileEndpoint('{{ $deleteEndPoint }}');
+                    {{camel_case($element)}}Obj.setDeleteFileEndpoint('{{ url('fineUploader/destroy') }}');
                     var deleteParame = {
                         'id' : responseJSON.uuid
                     }
@@ -129,11 +132,11 @@
                         console.log(val);
                         $('.qq-file-info').eq(index).find('.fa-download').attr('href', val.thumbnailUrl);
                         $('#{{ $element }}').append(inputStr);
-                        {{camel_case($element)}}Obj.setDeleteFileEndpoint('{{ $deleteEndPoint }}');
+                        {{camel_case($element)}}Obj.setDeleteFileEndpoint('{{ url('fineUploader/destroy') }}');
                         var deleteParame = {
                             'id' : val.uuid
                         }
-                       {{camel_case($element)}}Obj.setDeleteFileParams(deleteParame, index);
+                        {{camel_case($element)}}Obj.setDeleteFileParams(deleteParame, index);
                     })
                 },
                 addInitialFiles: function (file) {
@@ -141,7 +144,7 @@
                 }
             },
             deleteFile: {
-                endpoint: '{{ $deleteEndPoint }}',
+                endpoint: '{{ url('fineUploader/destroy') }}',
                 customHeaders: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -156,7 +159,10 @@
                 }
             },
             session: {
-                endpoint: '{!! $sessionEndPoint !!}',
+                endpoint: '{{ url('fineUploader/detail') }}',
+                params: {
+                    'id': "@if(is_array($id)){{ implode(',', $id) }}@else{{ $id }}@endif"
+                }
             }
         })
     </script>
