@@ -18,7 +18,7 @@ class FineUploaderServiceProvider extends ServiceProvider
             __DIR__.'/resources/statics' => public_path('statics'),
         ], 'public');
 
-        // 发布 html 组件
+        // 发布 前端页面 组件
         $this->publishes([
             __DIR__.'/resources/views/component' => resource_path('views/component'),
         ]);
@@ -27,9 +27,12 @@ class FineUploaderServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config/fineUploader.php' => config_path('fineUploader.php'),
         ]);
-        
-        // 加载 migrate 
+
+        // 加载 表迁移文件
         $this->loadMigrationsFrom(__DIR__.'/migrations');
+
+        // 加载 路由
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
     }
 
     /**
