@@ -74,4 +74,18 @@ class FineUploaderController extends Controller
         return response_json(200, $data);
     }
 
+    /**
+     * 删除文件   暂时先不删除上传到服务器上的文件
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request)
+    {
+        $data = [
+            'success' => true,
+            'uuid' => $request->input('id')
+        ];
+        return response_json(200, $data);
+    }
 }
