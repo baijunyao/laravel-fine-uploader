@@ -7,6 +7,8 @@ Route::prefix('fineUploader')->namespace('Baijunyao\LaravelFineUploader\Controll
     Route::get('detail', 'FineUploaderController@detail');
     // 上传
     Route::post('upload', 'FineUploaderController@upload');
+    // 下载
+    Route::get('download', 'FineUploaderController@download');
     // 删除
     Route::match(['post', 'delete'], 'destroy', 'FineUploaderController@destroy');
 });

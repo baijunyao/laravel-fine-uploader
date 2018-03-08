@@ -88,4 +88,18 @@ class FineUploaderController extends Controller
         ];
         return response_json(200, $data);
     }
+
+    /**
+     * 下载文件
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function download(Request $request)
+    {
+        $id = $request->input('id');
+        $data = FineUploaderFile::find($id);
+        return response()->download(public_path($data->path), $data->name);
+    }
 }
