@@ -23,6 +23,11 @@ class FineUploaderServiceProvider extends ServiceProvider
             __DIR__.'/resources/views/component' => resource_path('views/component'),
         ]);
 
+        // 发布配置项
+        $this->publishes([
+            __DIR__.'/config/fineUploader.php' => config_path('fineUploader.php'),
+        ]);
+        
         // 加载 migrate 
         $this->loadMigrationsFrom(__DIR__.'/migrations');
     }
