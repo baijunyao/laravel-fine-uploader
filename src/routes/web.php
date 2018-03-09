@@ -2,7 +2,10 @@
 
 
 // 路由
-Route::prefix('fineUploader')->namespace('Baijunyao\LaravelFineUploader\Controllers')->middleware('auth')->group(function () {
+Route::prefix('fineUploader')
+    ->namespace('Baijunyao\LaravelFineUploader\Controllers')
+    ->middleware(['web', 'auth'])
+    ->group(function () {
     // 文件详情
     Route::get('detail', 'FineUploaderController@detail');
     // 上传
