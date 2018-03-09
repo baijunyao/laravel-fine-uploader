@@ -58,18 +58,13 @@ class FineUploaderController extends Controller
         if ($result['status_code'] !== 200) {
             return response_json(500, '文件上传失败');
         }
-        $id = [];
-        foreach ($result['data'] as $v) {
-            $fileData = [
-                'id' => Uuid::uuid4(),
-                'name' => $v['name'],
-                'path' => $v['path']
-            ];
-            $id[] = $fineUploaderFileModel->create($fileData);
-        }
+        // 选中多个文件会分开顺序上传 每次一次 所以可以直接取第一个即可
+        $fileUploaderFileData = current($result['data']);
+        $fileUploaderFileData ['id'] = Uuid::uuid4();
+        $id = $fineUploaderFileModel->create($fileUploaderFileData)->id->toString();
         $data = [
             'success' => true,
-            'uuid' => implode(',', $id)
+            'uuid' => $id
         ];
         return response_json(200, $data);
     }
