@@ -1,6 +1,7 @@
 @php
     $element = empty($element) ? 'bjy'.uniqid() : $element;
     $path = empty($path) ? '' : $path;
+    $id = isset($id) ? implode(',', (array)$id) : '';
 @endphp
 <div id="{{ $element }}"></div>
 
@@ -233,7 +234,7 @@
             session: {
                 endpoint: '{{ url('fineUploader/detail') }}',
                 params: {
-                    'id': "@if(is_array($id)){{ implode(',', $id) }}@else{{ $id }}@endif"
+                    'id': "{{ $id }}"
                 }
             }
         })
