@@ -1,5 +1,6 @@
 @php
     $element = empty($element) ? 'bjy'.uniqid() : $element;
+    $path = empty($path) ? '' : $path;
 @endphp
 <div id="{{ $element }}"></div>
 
@@ -165,6 +166,9 @@
                 },
                 endpoint: '{{ url('fineUploader/upload') }}',
                 inputName: 'file',
+                params: {
+                    'path': '{{ $path }}'
+                }
             },
             callbacks: {
                 // 文件上传成功后的回调函数
