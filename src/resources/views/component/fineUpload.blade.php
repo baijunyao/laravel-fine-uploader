@@ -4,7 +4,13 @@
 <div id="{{ $element }}"></div>
 
 @push('css')
-    <link href="{{ asset('statics/fine-uploader/fine-uploader-gallery.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('statics/fine-uploader/fine-uploader-gallery.css') }}" rel="stylesheet">--}}
+    <link href="{{ asset('statics/fine-uploader/fine-uploader-new.css') }}" rel="stylesheet">
+    <style>
+        .qq-file-info a{
+            text-decoration: none;
+        }
+    </style>
 @endpush
 
 @push('js')
@@ -88,13 +94,74 @@
             </dialog>
         </div>
     </script>
+    <script type="text/template" id="qq-template-manual-trigger">
+        <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
+            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+            </div>
+            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+                <span class="qq-upload-drop-area-text-selector"></span>
+            </div>
+            <div class="buttons">
+                <div class="qq-upload-button-selector qq-upload-button">
+                    <div>选择文件</div>
+                </div>
+            </div>
+            <span class="qq-drop-processing-selector qq-drop-processing">
+                <span>可以直接把多个文件拖进来</span>
+                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+            </span>
+            <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
+                <li class="qq-file-info">
+                    <div class="qq-progress-bar-container-selector">
+                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                    </div>
+                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                    <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                    <span class="qq-upload-file-selector qq-upload-file"></span>
+                    <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="Edit filename"></span>
+                    <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+                    <span class="qq-upload-size-selector qq-upload-size"></span>
+                    <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
+                    <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
+                    <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">删除</button>
+                    <a type="button" class="qq-btn qq-upload-retry fa-download">下载</a>
+                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                </li>
+            </ul>
+
+            <dialog class="qq-alert-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Close</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-confirm-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">No</button>
+                    <button type="button" class="qq-ok-button-selector">Yes</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-prompt-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <input type="text">
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Cancel</button>
+                    <button type="button" class="qq-ok-button-selector">Ok</button>
+                </div>
+            </dialog>
+        </div>
+    </script>
     <script>
         var {{camel_case($element)}}Obj = new qq.FineUploader({
             element: document.getElementById("{{ $element }}"),
-            template: 'qq-template',
+            template: 'qq-template-manual-trigger',
             request: {
                 customHeaders: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 endpoint: '{{ url('fineUploader/upload') }}',
                 inputName: 'file',
@@ -127,10 +194,11 @@
 
                 // 获取文件列表后的回调函数
                 onSessionRequestComplete: function (file) {
+                    var downloadUrl = '{{ url('fineUploader/download') }}';
                     $.each(file, function (index, val) {
                         var inputStr = '<input type="hidden" name="{{ $inputName }}['+val.uuid+']" value="'+val.uuid+'">';
                         console.log(val);
-                        $('.qq-file-info').eq(index).find('.fa-download').attr('href', val.thumbnailUrl);
+                        $('.qq-file-info').eq(index).find('.fa-download').attr('href', downloadUrl+'?id='+val.uuid);
                         $('#{{ $element }}').append(inputStr);
                         {{camel_case($element)}}Obj.setDeleteFileEndpoint('{{ url('fineUploader/destroy') }}');
                         var deleteParame = {
@@ -146,7 +214,7 @@
             deleteFile: {
                 endpoint: '{{ url('fineUploader/destroy') }}',
                 customHeaders: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 enabled: true,
                 method: 'POST',
