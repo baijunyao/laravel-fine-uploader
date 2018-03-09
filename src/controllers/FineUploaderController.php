@@ -60,7 +60,11 @@ class FineUploaderController extends Controller
         }
         // 选中多个文件会分开顺序上传 每次一次 所以可以直接取第一个即可
         $fileUploaderFileData = current($result['data']);
+        // 生成 uuid
         $fileUploaderFileData ['id'] = Uuid::uuid4();
+        // 获取上传者的 user_id
+        $fileUploaderFileData ['user_id'] = auth()->user()->id;
+        // 插入数据库 此处需要注意 返回的id 是 uuid 对象 需要转成字符串
         $id = $fineUploaderFileModel->create($fileUploaderFileData)->id->toString();
         $data = [
             'success' => true,
