@@ -56,7 +56,7 @@
                         <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
                         <span class="qq-upload-size-selector qq-upload-size"></span>
                         <button type="button" class="qq-btn bjy-down">
-                            <a class="fa fa-download" aria-label="download" href=""></a>
+                            <a class="fa fa-download js-download" aria-label="download" href=""></a>
                         </button>
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">
                             <span class="qq-btn qq-delete-icon" aria-label="Delete"></span>
@@ -127,7 +127,7 @@
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
                     <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">删除</button>
-                    <a type="button" class="qq-btn qq-upload-retry fa-download">下载</a>
+                    <a type="button" class="qq-btn qq-upload-retry js-download">下载</a>
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
@@ -176,9 +176,9 @@
                 onComplete: function(id, name, responseJSON) {
                     // 文件上传成功后添加一个附带文件id的隐藏域
                     var inputStr = '<input type="hidden" name="{{ $inputName }}['+responseJSON.uuid+']" value="'+responseJSON.uuid+'" />'
-                    var href = $('.fa-download').attr('href');
+                    var href = $('.js-download').attr('href');
                     var new_href = href+'id='+responseJSON.uuid;
-                    $('.fa-download').attr('href',new_href);
+                    $('.js-download').attr('href',new_href);
                     $('#{{ $element }}').append(inputStr);
 
                     // 设置删除时候的url和参数
@@ -203,7 +203,7 @@
                     $.each(file, function (index, val) {
                         var inputStr = '<input type="hidden" name="{{ $inputName }}['+val.uuid+']" value="'+val.uuid+'">';
                         console.log(val);
-                        $('.qq-file-info').eq(index).find('.fa-download').attr('href', downloadUrl+'?id='+val.uuid);
+                        $('.qq-file-info').eq(index).find('.js-download').attr('href', downloadUrl+'?id='+val.uuid);
                         $('#{{ $element }}').append(inputStr);
                         {{camel_case($element)}}Obj.setDeleteFileEndpoint('{{ url('fineUploader/destroy') }}');
                         var deleteParame = {
