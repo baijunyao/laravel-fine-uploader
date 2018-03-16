@@ -12,6 +12,33 @@
         .qq-file-info a{
             text-decoration: none;
         }
+        .bjy-fine-uploader .qq-file-info {
+            overflow: hidden;
+            height: 80px;
+        }
+        .bjy-fine-uploader .bjy-fu-thumbnail{
+            width: 20%;
+            float: left;
+        }
+        .bjy-fine-uploader .bjy-fu-thumbnail img{
+            width: 80px;
+            height: 60px;
+        }
+        .bjy-fine-uploader .bjy-fu-handle{
+            padding-left: 10px;
+            width: 80%;
+            height: 60px;
+            float: left;
+        }
+        .bjy-fine-uploader .bjy-fu-handle .bjy-fuh-name{
+            height: 30px;
+        }
+        .bjy-fine-uploader .bjy-fu-handle .bjy-fuh-btn{
+            height: 30px;
+        }
+        .bjy-fine-uploader .bjy-fu-handle .bjy-fuh-name span{
+            width: 100%;
+        }
     </style>
 @endpush
 
@@ -97,7 +124,7 @@
         </div>
     </script>
     <script type="text/template" id="qq-template-manual-trigger">
-        <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
+        <div class="qq-uploader-selector qq-uploader bjy-fine-uploader" qq-drop-area-text="Drop files here">
             <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
                 <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
             </div>
@@ -119,16 +146,25 @@
                         <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
                     </div>
                     <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
-                    <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
-                    <span class="qq-upload-file-selector qq-upload-file"></span>
                     <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="Edit filename"></span>
                     <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
-                    <span class="qq-upload-size-selector qq-upload-size"></span>
-                    <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
-                    <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
-                    <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">删除</button>
-                    <a type="button" class="qq-btn qq-upload-retry js-download">下载</a>
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                    <div class="bjy-fu-thumbnail">
+                        <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                    </div>
+                    <div class="bjy-fu-handle">
+                        <div class="bjy-fuh-name">
+                            <span class="qq-upload-file-selector qq-upload-file"></span>
+                        </div>
+                        <div class="bjy-fuh-btn">
+                            <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">删除</button>
+                            <a type="button" class="qq-btn qq-upload-retry js-download">下载</a>
+                            <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
+                            <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
+                            <span class="qq-upload-size-selector qq-upload-size"></span>
+                        </div>
+                    </div>
+
                 </li>
             </ul>
 
