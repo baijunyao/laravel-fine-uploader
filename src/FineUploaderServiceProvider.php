@@ -2,7 +2,10 @@
 
 namespace Baijunyao\LaravelFineUploader;
 
+use Baijunyao\LaravelFineUploader\Middleware\LaravelFineUploader;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Support\Facades\Blade;
 
 class FineUploaderServiceProvider extends ServiceProvider
 {
@@ -20,7 +23,7 @@ class FineUploaderServiceProvider extends ServiceProvider
 
         // 发布 前端页面 组件
         $this->publishes([
-            __DIR__.'/resources/views/component' => resource_path('views/component'),
+            __DIR__.'/resources/views' => resource_path('views/vendor/fineUploader'),
         ]);
 
         // 发布配置项
@@ -28,11 +31,18 @@ class FineUploaderServiceProvider extends ServiceProvider
             __DIR__.'/config/fineUploader.php' => config_path('fineUploader.php'),
         ]);
 
+        Blade::directive('fineUploader', function ($expression) {
+            return "<?php echo '<span class=\"laravel-fine-uploader-tag bjy-'. uniqid() .'\" style=\"display: none\">' . json_encode($expression) . '</span>' ?>";
+        });
+
         // 加载 表迁移文件
         $this->loadMigrationsFrom(__DIR__.'/migrations');
 
         // 加载 路由
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+
+        $kernel = $this->app[Kernel::class];
+        $kernel->pushMiddleware(LaravelFineUploader::class);
     }
 
     /**
