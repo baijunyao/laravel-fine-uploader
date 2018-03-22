@@ -139,6 +139,7 @@ php;
 <script src="$fineUploaderJsPath"></script>
 $fineUploaderTemplate
 $fineUploaderScript
+</body>
 php;
 
         $seach = array_merge($tag[0], [
