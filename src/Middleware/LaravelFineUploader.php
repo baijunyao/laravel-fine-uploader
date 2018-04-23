@@ -39,14 +39,14 @@ class LaravelFineUploader
 
         $fineUploaderDiv = [];
         $fineUploaderScript = '';
-        $fineUploaderTemplate = '';
+        $fineUploaderTemplate = file_get_contents(resource_path('views/vendor/fineUploader/default.blade.php'));
         $template = [];
         foreach ($tag[1] as $k => $v) {
             $script = file_get_contents(resource_path('views/vendor/fineUploader/script.blade.php'));
             $array = json_decode($v, true);
             $templateId = 'qq-template-manual-trigger';
             // 获取所有用到的模板
-            if (!empty($array['template'])) {
+            if (!empty($array['template']) && $array['template'] != 'default') {
                 $template = file_get_contents(resource_path('views/vendor/fineUploader/'. $array['template'] .'.blade.php'));
                 preg_match_all("/<script.*?id=\"(.*)?\"/", $template, $templateIdArray);
                 $templateId = $templateIdArray[1][0];
@@ -98,41 +98,13 @@ class LaravelFineUploader
         }
 
         // 插入css标签
+        $style = file_get_contents(resource_path('views/vendor/fineUploader/css.blade.php'));
         $fineUploaderCssPath = asset('statics/fine-uploader/fine-uploader-new.css');
+        $fineUploaderGalleryCssPath = asset('statics/fine-uploader/fine-uploader-gallery.css');
         $fineUploaderCss = <<<php
 <link rel="stylesheet" href="$fineUploaderCssPath">
-<style>
-    .qq-file-info a{
-        text-decoration: none;
-    }
-    .bjy-fine-uploader .qq-file-info {
-        overflow: hidden;
-        height: 80px;
-    }
-    .bjy-fine-uploader .bjy-fu-thumbnail{
-        width: 20%;
-        float: left;
-    }
-    .bjy-fine-uploader .bjy-fu-thumbnail img{
-        width: 80px;
-        height: 60px;
-    }
-    .bjy-fine-uploader .bjy-fu-handle{
-        padding-left: 10px;
-        width: 80%;
-        height: 60px;
-        float: left;
-    }
-    .bjy-fine-uploader .bjy-fu-handle .bjy-fuh-name{
-        height: 30px;
-    }
-    .bjy-fine-uploader .bjy-fu-handle .bjy-fuh-btn{
-        height: 30px;
-    }
-    .bjy-fine-uploader .bjy-fu-handle .bjy-fuh-name span{
-        width: 100%;
-    }
-</style>
+<link rel="stylesheet" href="$fineUploaderGalleryCssPath">
+$style
 </head>
 php;
 
