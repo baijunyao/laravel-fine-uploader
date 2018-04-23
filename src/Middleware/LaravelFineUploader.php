@@ -39,10 +39,19 @@ class LaravelFineUploader
 
         $fineUploaderDiv = [];
         $fineUploaderScript = '';
-
+        $fineUploaderTemplate = '';
+        $template = [];
         foreach ($tag[1] as $k => $v) {
             $script = file_get_contents(resource_path('views/vendor/fineUploader/script.blade.php'));
             $array = json_decode($v, true);
+            $templateId = 'qq-template-manual-trigger';
+            // 获取所有用到的模板
+            if (!empty($array['template'])) {
+                $template = file_get_contents(resource_path('views/vendor/fineUploader/'. $array['template'] .'.blade.php'));
+                preg_match_all("/<script.*?id=\"(.*)?\"/", $template, $templateIdArray);
+                $templateId = $templateIdArray[1][0];
+                $fineUploaderTemplate .= $template;
+            }
             // 定义各项默认值
             $element = empty($array['element']) ? 'bjy'.uniqid() : $array['element'];
             $path = empty($array['path']) ? '' : $array['path'];
@@ -58,6 +67,7 @@ class LaravelFineUploader
             $scriptSearch = [
                 '{{ camel_case($element) }}',
                 '{{ $element }}',
+                '{{ $template }}',
                 '{{ $path }}',
                 '{{ $id }}',
                 '{{ $inputName }}',
@@ -72,6 +82,7 @@ class LaravelFineUploader
             $scriptReplace = [
                 $camelElement,
                 $element,
+                $templateId,
                 $path,
                 $id,
                 $inputName,
@@ -125,10 +136,8 @@ class LaravelFineUploader
 </head>
 php;
 
-
         // 插入js标签
         $fineUploaderJsPath = asset('statics/fine-uploader/fine-uploader.js');
-        $fineUploaderTemplate = file_get_contents(resource_path('views/vendor/fineUploader/template.blade.php'));
         $jqueryJsPath = asset('statics/jquery-2.2.4/jquery.min.js');
         $fineUploaderJs = <<<php
 <script>

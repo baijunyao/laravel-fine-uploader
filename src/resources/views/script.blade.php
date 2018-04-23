@@ -1,7 +1,7 @@
 <script>
     var {{ camel_case($element) }}Obj = new qq.FineUploader({
         element: document.getElementById("{{ $element }}"),
-        template: 'qq-template-manual-trigger',
+        template: '{{ $template }}',
         request: {
             customHeaders: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -43,8 +43,9 @@
                 var downloadUrl = '{{ url('fineUploader/download') }}';
                 $.each(file, function (index, val) {
                     var inputStr = '<input type="hidden" name="{{ $inputName }}['+val.uuid+']" value="'+val.uuid+'">';
+                    console.log(val);
+                    $('.qq-file-info').eq(index).find('.js-download').attr('href', downloadUrl+'?id='+val.uuid);
                     $('#{{ $element }}').append(inputStr);
-                    $('#{{ $element }} .js-download').eq(index).attr('href', downloadUrl+'?id='+val.uuid);
                     {{ camel_case($element) }}Obj.setDeleteFileEndpoint('{{ url('fineUploader/destroy') }}');
                     var deleteParame = {
                         'id' : val.uuid
