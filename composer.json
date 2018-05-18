@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "baijunyao/laravel-plugin-manager": "2.0.*",
         "baijunyao/laravel-upload": "1.0.*",
         "baijunyao/laravel-response-json": "1.0.*"
     },

@@ -1,40 +1,23 @@
 <?php
 
-namespace Baijunyao\LaravelFineUploader\Middleware;
+namespace Baijunyao\LaravelFineUploader;
 
-use Closure;
-use Symfony\Component\HttpFoundation\Response;
+use Baijunyao\LaravelPluginManager\Contracts\PluginManager;
 
-class LaravelFineUploader
+class Manager extends PluginManager
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
+    protected $element = 'laravel-fine-uploader-tag';
+
+    protected function load()
     {
-        $response = $next($request);
-        // 获取 response 内容
-        $content = $response->getContent();
-
-        // 如果没有 body 标签 则直接返回
-        if (false === strripos($content, '</body>')) {
-            return $response;
-        }
-
-        // 如果没有使用上传插件 则直接返回
-        if (false === strripos($content, 'laravel-fine-uploader-tag')) {
-            return $response;
-        }
+        $content = $this->content;
 
         // 正则匹配出数据
         preg_match_all("/<span class=\"laravel-fine-uploader-tag bjy-\w+\" style=\"display: none\">(.+?)<\/span>/", $content, $tag);
+
         // 没有没有数据则直接返回
         if (empty($tag[1])) {
-            return $response;
+            return false;
         }
 
         $fineUploaderDiv = [];
@@ -97,47 +80,25 @@ class LaravelFineUploader
             $fineUploaderScript .= "\r\n" . str_replace($scriptSearch, $scriptReplace, $script);
         }
 
-        // 插入css标签
+        // css 标签
         $style = file_get_contents(resource_path('views/vendor/fineUploader/css.blade.php'));
-        $fineUploaderCssPath = asset('statics/fine-uploader/fine-uploader-new.css');
-        $fineUploaderGalleryCssPath = asset('statics/fine-uploader/fine-uploader-gallery.css');
-        $fineUploaderCss = <<<php
-<link rel="stylesheet" href="$fineUploaderCssPath">
-<link rel="stylesheet" href="$fineUploaderGalleryCssPath">
-$style
-</head>
-php;
 
-        // 插入js标签
-        $fineUploaderJsPath = asset('statics/fine-uploader/fine-uploader.js');
-        $jqueryJsPath = asset('statics/jquery-2.2.4/jquery.min.js');
-        $fineUploaderJs = <<<php
-<script>
-    (function(){
-        window.jQuery || document.write('<script src="$jqueryJsPath"><\/script>');
-    })();
-</script>
-<script src="$fineUploaderJsPath"></script>
-$fineUploaderTemplate
-$fineUploaderScript
-</body>
-php;
+        $this->cssFile('statics/fine-uploader/fine-uploader-new.css')
+            ->cssFile('statics/fine-uploader/fine-uploader-gallery.css')
+            ->cssContent($style)
+            ->jquery()
+            ->jsFile('statics/fine-uploader/fine-uploader.js')
+            ->jsContent($fineUploaderTemplate)
+            ->jsContent($fineUploaderScript);
+        foreach ($fineUploaderDiv as $k => $v) {
+            $data = [
+                'search' => $tag[0][$k],
+                'replace' => $v
+            ];
+            $this->setReplace($data);
+        }
 
-        $seach = array_merge($tag[0], [
-            '</head>',
-            '</body>'
-        ]);
-
-        $subject = array_merge($fineUploaderDiv, [
-            $fineUploaderCss,
-            $fineUploaderJs
-        ]);
-        // p($seach);die;
-
-        $content = str_replace($seach, $subject, $content);
-        // 更新内容并重置Content-Length
-        $response->setContent($content);
-        $response->headers->remove('Content-Length');
-        return $response;
     }
+
+
 }

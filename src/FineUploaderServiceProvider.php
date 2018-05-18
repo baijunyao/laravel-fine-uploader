@@ -41,8 +41,6 @@ class FineUploaderServiceProvider extends ServiceProvider
         // 加载 路由
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
 
-        $kernel = $this->app[Kernel::class];
-        $kernel->pushMiddleware(LaravelFineUploader::class);
     }
 
     /**
