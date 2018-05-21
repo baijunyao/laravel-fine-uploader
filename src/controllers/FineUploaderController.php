@@ -52,7 +52,7 @@ class FineUploaderController extends Controller
             return response_json(401, '没有要上传的文件');
         }
         $path = $request->input('path', '');
-        $path = empty($path) ? config('fineUploader.default_path') : 'uploads/'.$path;
+        $path = empty($path) ? config('fineUploader.path') : public_path('uploads/'.$path);
         // 上传文件
         $result = upload('file', $path);
         if ($result['status_code'] !== 200) {
