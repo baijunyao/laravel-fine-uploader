@@ -1,6 +1,6 @@
 <?php
 
 return [
-    // 上传文件的基础目录
-    'path' => public_path('uploads/default')
+    // 上传文件的默认目录
+    'path' => 'uploads/default'
 ];
