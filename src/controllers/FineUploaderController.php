@@ -7,6 +7,7 @@ use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Baijunyao\LaravelFineUploader\Models\FineUploaderFile;
+use Baijunyao\LaravelFineUploader\Events\Uploaded;
 
 class FineUploaderController extends Controller
 {
@@ -59,18 +60,26 @@ class FineUploaderController extends Controller
             return response_json(500, '文件上传失败');
         }
         // 选中多个文件会分开顺序上传 每次一次 所以可以直接取第一个即可
-        $fileUploaderFileData = current($result['data']);
+        $file = current($result['data']);
+        $fileUploaderFileData = $file;
         // 生成 uuid
         $fileUploaderFileData ['id'] = Uuid::uuid4();
         // 获取上传者的 user_id
         $fileUploaderFileData ['user_id'] = auth()->user()->id;
         // 插入数据库 此处需要注意 返回的id 是 uuid 对象 需要转成字符串
         $id = $fineUploaderFileModel->create($fileUploaderFileData)->id->toString();
-        $data = [
-            'success' => true,
-            'uuid' => $id
-        ];
-        return response_json(200, $data);
+        if ($id) {
+            // 分发事件
+            event(new Uploaded($file));
+            $data = [
+                'success' => true,
+                'uuid' => $id
+            ];
+            return response_json(200, $data);
+        } else {
+            return response_json(500, '保存失败');
+        }
+
     }
 
     /**
