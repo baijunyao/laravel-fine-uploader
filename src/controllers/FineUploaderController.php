@@ -2,6 +2,7 @@
 
 namespace Baijunyao\LaravelFineUploader\Controllers;
 
+use Baijunyao\LaravelUpload\Upload;
 use File;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
@@ -48,16 +49,15 @@ class FineUploaderController extends Controller
      */
     public function upload(Request $request, FineUploaderFile $fineUploaderFileModel)
     {
-        // 判断请求中是否包含name=file的上传文件
-        if (! $request->hasFile('file')) {
-            return response_json(401, '没有要上传的文件');
-        }
+        // 组合上传目录
         $path = $request->input('path', '');
         $path = empty($path) ? config('fineUploader.path') : 'uploads/'.$path;
+
         // 上传文件
-        $result = upload('file', $path);
+        $result = Upload::file('file', $path);
+
         if ($result['status_code'] !== 200) {
-            return response_json(500, '文件上传失败');
+            return response_json($result['status_code'], $result['message']);
         }
         // 选中多个文件会分开顺序上传 每次一次 所以可以直接取第一个即可
         $file = current($result['data']);
