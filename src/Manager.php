@@ -22,15 +22,15 @@ class Manager extends PluginManager
 
         $fineUploaderDiv = [];
         $fineUploaderScript = '';
-        $fineUploaderTemplate = file_get_contents(resource_path('views/vendor/fineUploader/default.blade.php'));
+        $fineUploaderTemplate = file_get_contents(resource_path('views/vendor/laravel-fine-uploader/default.blade.php'));
         $template = [];
         foreach ($tag[1] as $k => $v) {
-            $script = file_get_contents(resource_path('views/vendor/fineUploader/script.blade.php'));
+            $script = file_get_contents(resource_path('views/vendor/laravel-fine-uploader/script.blade.php'));
             $array = json_decode($v, true);
             $templateId = 'qq-template-manual-trigger';
             // 获取所有用到的模板
             if (!empty($array['template']) && $array['template'] != 'default') {
-                $template = file_get_contents(resource_path('views/vendor/fineUploader/'. $array['template'] .'.blade.php'));
+                $template = file_get_contents(resource_path('views/vendor/laravel-fine-uploader/'. $array['template'] .'.blade.php'));
                 preg_match_all("/<script.*?id=\"(.*)?\"/", $template, $templateIdArray);
                 $templateId = $templateIdArray[1][0];
                 $fineUploaderTemplate .= $template;
@@ -59,8 +59,8 @@ class Manager extends PluginManager
                 "{{ url('fineUploader/download') }}",
                 "{{ url('fineUploader/destroy') }}",
                 "{{ url('fineUploader/detail') }}",
-                "{{ asset('statics/fine-uploader/placeholders/not_available-generic.png') }}",
-                "{{ asset('statics/fine-uploader/placeholders/waiting-generic.png') }}",
+                "{{ asset('statics/laravel-fine-uploader/placeholders/not_available-generic.png') }}",
+                "{{ asset('statics/laravel-fine-uploader/placeholders/waiting-generic.png') }}",
             ];
             $scriptReplace = [
                 $camelElement,
@@ -74,20 +74,20 @@ class Manager extends PluginManager
                 url('fineUploader/download'),
                 url('fineUploader/destroy'),
                 url('fineUploader/detail'),
-                asset('statics/fine-uploader/placeholders/not_available-generic.png'),
-                asset('statics/fine-uploader/placeholders/waiting-generic.png'),
+                asset('statics/laravel-fine-uploader/placeholders/not_available-generic.png'),
+                asset('statics/laravel-fine-uploader/placeholders/waiting-generic.png'),
             ];
             $fineUploaderScript .= "\r\n" . str_replace($scriptSearch, $scriptReplace, $script);
         }
 
         // css 标签
-        $style = file_get_contents(resource_path('views/vendor/fineUploader/css.blade.php'));
+        $style = file_get_contents(resource_path('views/vendor/laravel-fine-uploader/css.blade.php'));
 
-        $this->cssFile('statics/fine-uploader/fine-uploader-new.css')
-            ->cssFile('statics/fine-uploader/fine-uploader-gallery.css')
+        $this->cssFile('statics/laravel-fine-uploader/fine-uploader-new.css')
+            ->cssFile('statics/laravel-fine-uploader/fine-uploader-gallery.css')
             ->cssContent($style)
             ->jquery()
-            ->jsFile('statics/fine-uploader/fine-uploader.js')
+            ->jsFile('statics/laravel-fine-uploader/fine-uploader.js')
             ->jsContent($fineUploaderTemplate)
             ->jsContent($fineUploaderScript);
         foreach ($fineUploaderDiv as $k => $v) {

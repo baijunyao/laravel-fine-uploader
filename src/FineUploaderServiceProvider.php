@@ -23,12 +23,12 @@ class FineUploaderServiceProvider extends ServiceProvider
 
         // 发布 前端页面 组件
         $this->publishes([
-            __DIR__.'/resources/views' => resource_path('views/vendor/fineUploader'),
+            __DIR__.'/resources/views' => resource_path('views/vendor/laravel-fine-uploader'),
         ]);
 
         // 发布配置项
         $this->publishes([
-            __DIR__.'/config/fineUploader.php' => config_path('fineUploader.php'),
+            __DIR__.'/config/laravel-fine-uploader.php' => config_path('laravel-fine-uploader.php'),
         ]);
 
         Blade::directive('fineUploader', function ($expression) {

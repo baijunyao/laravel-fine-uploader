@@ -51,7 +51,7 @@ class FineUploaderController extends Controller
     {
         // 组合上传目录
         $path = $request->input('path', '');
-        $path = empty($path) ? config('fineUploader.path') : 'uploads/'.$path;
+        $path = empty($path) ? config('laravel-fine-uploader.path') : 'uploads/'.$path;
 
         // 上传文件
         $result = Upload::file('file', $path);
