@@ -68,8 +68,8 @@
         thumbnails: {
             // 缩略图
             placeholders: {
-                notAvailablePath: "{{ asset('statics/fine-uploader/placeholders/not_available-generic.png') }}",
-                waitingPath: "{{ asset('statics/fine-uploader/placeholders/waiting-generic.png') }}"
+                notAvailablePath: "{{ asset('statics/laravel-fine-uploader/placeholders/not_available-generic.png') }}",
+                waitingPath: "{{ asset('statics/laravel-fine-uploader/placeholders/waiting-generic.png') }}"
             }
         },
         session: {
